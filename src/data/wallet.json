@@ -1,0 +1,13 @@
+{
+  "balance": 1250,
+  "transactions": [
+    {"id":"t001","type":"debit","title":"Ride Payment","date":"2025-10-20","amount":450},
+    {"id":"t002","type":"credit","title":"Wallet Recharge","date":"2025-10-18","amount":1000},
+    {"id":"t003","type":"debit","title":"Ride Payment","date":"2025-10-18","amount":120},
+    {"id":"t004","type":"credit","title":"Cashback","date":"2025-10-15","amount":50}
+  ],
+  "cards": [
+    {"id":"c1","masked":"•••• 4532","primary":true},
+    {"id":"c2","masked":"•••• 8901","primary":false}
+  ]
+}

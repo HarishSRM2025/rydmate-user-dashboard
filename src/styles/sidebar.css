@@ -1,0 +1,17 @@
+.sidebar{width:256px;background:#fff;height:calc(100vh - 64px);position:sticky;top:64px;box-shadow:2px 0 10px rgba(0,0,0,0.05);display:flex;flex-direction:column;transition:transform .3s}
+.sidebar-nav{padding:18px;flex:1;overflow:auto}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;font-weight:600;cursor:pointer;background:none;border:none;width:100%;text-align:left;color:#374151;margin-bottom:8px}
+.nav-item:hover{background:#f3f4f6}
+.nav-item i{width:24px;text-align:center}
+.nav-item.active{background:var(--primary-red);color:#fff;box-shadow:0 4px 15px rgba(239,68,68,0.2)}
+.book-ride-btn{background:linear-gradient(135deg,var(--primary-red),var(--primary-red-dark));color:#fff}
+.book-ride-btn:hover{
+    background-color: #b40707;
+}
+.logout-btn{padding:12px;border-top:1px solid var(--gray-200)}
+.logout-btn button{color:var(--primary-red)}
+/* mobile hide */
+@media (max-width:1024px){
+  .sidebar{position:fixed;left:0;top:64px;z-index:40;transform:translateX(-100%)}
+  .sidebar.mobile-open{transform:translateX(0)}
+}

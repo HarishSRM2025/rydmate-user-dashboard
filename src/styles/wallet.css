@@ -1,0 +1,188 @@
+.wallet-page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.wallet-page-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+@media (max-width:768px) {
+    .wallet-page-layout {
+        display: grid;
+        grid-template-columns: auto;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+}
+
+/* WALLET BALANCE CARD */
+.wallet-page-balance-card {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-radius: 16px;
+  padding: 18px;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(239, 68, 68, 0.35);
+}
+
+.wallet-page-balance-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.wallet-page-balance-label {
+  opacity: .9;
+}
+
+.wallet-page-balance-value {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.wallet-page-balance-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+/* Action Buttons */
+.wallet-page-balance-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.wallet-page-btn-primary {
+  background: #fff;
+  color: #dc2626;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wallet-page-btn-secondary {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+}
+
+/* SECTIONS */
+.wallet-page-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  margin-top: 20px;
+}
+
+.wallet-page-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* TRANSACTIONS */
+.wallet-page-transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wallet-page-transaction-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+.wallet-page-transaction-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wallet-page-transaction-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Credit / Debit Colors */
+.wallet-page-transaction-icon.credit { background: #d1fae5; color: #10b981; }
+.wallet-page-transaction-icon.debit { background: #fee2e2; color: #ef4444; }
+
+.wallet-page-transaction-title {
+  font-weight: 600;
+}
+
+.wallet-page-transaction-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.wallet-page-transaction-amount {
+  font-weight: 700;
+}
+.wallet-page-transaction-amount.credit { color: #10b981; }
+.wallet-page-transaction-amount.debit { color: #ef4444; }
+
+/* PAYMENT CARDS */
+.wallet-page-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wallet-page-card-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: white;
+}
+
+.wallet-page-card-item.primary {
+  border: 2px solid #ef4444;
+  background: rgba(239,68,68,0.05);
+}
+
+.wallet-page-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fee2e2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ef4444;
+}
+
+.wallet-page-add-card-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px dashed #e5e7eb;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}

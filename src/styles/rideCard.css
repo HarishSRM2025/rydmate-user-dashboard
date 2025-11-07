@@ -1,0 +1,99 @@
+/* Container */
+.rides-page-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+.rides-page-value{
+    margin-left: 8px;
+}
+/* Card */
+.rides-page-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  border: 1px solid #f2f2f2;
+  transition: .3s;
+}
+
+.rides-page-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+/* Header */
+.rides-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.rides-page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.rides-page-title i {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  width: max-content;
+}
+
+/* Body */
+.rides-page-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-bottom: 18px;
+}
+
+.rides-page-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.rides-page-value,
+.rides-page-fare {
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Status Badge */
+.rides-page-badge {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.rides-page-status-completed { background: #d1fae5; color: #065f46; }
+.rides-page-status-cancelled { background: #fee2e2; color: #991b1b; }
+.rides-page-status-pending { background: #fef3c7; color: #92400e; }
+
+/* Footer */
+.rides-page-footer {
+  text-align: right;
+}
+
+.rides-page-btn {
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 100%;
+}
+
+.rides-page-btn:hover {
+  opacity: .9;
+}

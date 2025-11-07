@@ -1,0 +1,5 @@
+[
+  {"id":"o1","code":"FIRST20","title":"20% Off","desc":"First ride discount for new users","min":200,"expires":"2025-12-31","active":true},
+  {"id":"o2","code":"REFER100","title":"₹100 Reward","desc":"Refer a friend and earn rewards","min":300,"expires":"2025-12-31","active":true},
+  {"id":"o3","code":"WEEKEND15","title":"15% Off","desc":"Weekend special on all rides","min":150,"expires":"2025-11-30","active":true}
+]

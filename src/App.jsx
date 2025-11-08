@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 import TopNav from './components/TopNav';
 import Sidebar from './components/Sidebar';
 import DashboardOverview from './components/DashboardOverview';
@@ -20,17 +22,7 @@ import './styles/sidebar.css';
 import './styles/cards.css';
 import './styles/modal.css';
 
-const SECTION_COMPONENTS = {
-  overview: DashboardOverview,
-  rides: Rides,
-  wallet: Wallet,
-  offers: Offers,
-  profile: Profile,
-  support: Support,
-};
-
 export default function App() {
-  const [section, setSection] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
 
@@ -43,34 +35,45 @@ export default function App() {
     openBooking: () => setBookingOpen(true),
   };
 
-  const SectionComp = SECTION_COMPONENTS[section] || DashboardOverview;
-
   return (
-    <div className="app-root">
-      <TopNav
-        user={userData}
-        onToggleSidebar={() => setSidebarOpen(v => !v)}
-        onOpenBooking={() => setBookingOpen(true)}
-      />
-      <div className="main-layout">
-        <Sidebar
-          current={section}
-          onChange={(s) => { setSection(s); setSidebarOpen(false); }}
-          open={sidebarOpen}
+    <Router>
+      <div className="app-root">
+        <TopNav
+          user={userData}
+          onToggleSidebar={() => setSidebarOpen(v => !v)}
           onOpenBooking={() => setBookingOpen(true)}
         />
-        <main className="main-content">
-          <div className="content-wrapper">
-            <SectionComp {...commonProps} />
-          </div>
-        </main>
-      </div>
 
-      <BookRideModal
-        open={bookingOpen}
-        onClose={() => setBookingOpen(false)}
-        vehicles={['bike','auto','car']}
-      />
-    </div>
+        <div className="main-layout">
+          <Sidebar
+            open={sidebarOpen}
+            onOpenBooking={() => setBookingOpen(true)}
+            onNavigate={() => setSidebarOpen(false)}
+          />
+
+          <main className="main-content">
+            <div className="content-wrapper">
+              <Routes>
+                {/* Default redirect to /user/overview */}
+                <Route path="/" element={<Navigate to="/user/overview" />} />
+
+                <Route path="/user/overview" element={<DashboardOverview {...commonProps} />} />
+                <Route path="/user/rides" element={<Rides {...commonProps} />} />
+                <Route path="/user/wallet" element={<Wallet {...commonProps} />} />
+                <Route path="/user/offers" element={<Offers {...commonProps} />} />
+                <Route path="/user/profile" element={<Profile {...commonProps} />} />
+                <Route path="/user/support" element={<Support {...commonProps} />} />
+              </Routes>
+            </div>
+          </main>
+        </div>
+
+        <BookRideModal
+          open={bookingOpen}
+          onClose={() => setBookingOpen(false)}
+          vehicles={['bike', 'auto', 'car']}
+        />
+      </div>
+    </Router>
   );
 }

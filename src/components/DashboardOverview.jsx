@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/cards.css';
+import RideModal from './rideDetails';
+import ridesData from '../data/rides.json'; // JSON file
 
-export default function DashboardOverview({ rides, wallet, offers, openBooking }) {
-  const totalRides = rides.length;
-  const scheduled = rides.filter(r => r.status.toLowerCase() === 'scheduled').length;
+export default function DashboardOverview({ wallet, offers }) {
+  const [selectedRide, setSelectedRide] = useState(null);
+
+  const totalRides = ridesData.length;
+  const scheduled = ridesData.filter(r => r.status.toLowerCase() === 'scheduled').length;
   const activeOffers = offers.filter(o => o.active).length;
+
   return (
     <>
       <h2 className="section-title">Dashboard Overview</h2>
@@ -54,36 +59,36 @@ export default function DashboardOverview({ rides, wallet, offers, openBooking }
       <div className="card">
         <h3 className="card-title">Recent Rides</h3>
         <div className="rides-container">
-            {rides.slice(0, 5).map((r) => (
-                <div className="ride-card" key={r.id}>
-                <div className="ride-top">
-                    <div className="ride-icon">
-                    <i className="fas fa-route"></i>
-                    </div>
-                    <div className="ride-info">
-                    <div className="ride-location">{r.route}</div>
-                    <div className="ride-date">{r.date}</div>
-                    </div>
+          {ridesData.slice(0, 5).map((r) => (
+            <div className="ride-card" key={r.id}>
+              <div className="ride-top">
+                <div className="ride-icon">
+                  <i className={`${r.vehicle === "Bike" ? "fas fa-motorcycle" : r.vehicle === "Car" ? "fas fa-car" : "fas fa-truck-pickup"}`}></i>
                 </div>
+                <div className="ride-info">
+                  <div className="ride-location">{r.route}</div>
+                  <div className="ride-date">{r.date}</div>
+                </div>
+              </div>
 
-                <div className="ride-details">
-                    <div>
-                    <span className="lbl">Fare</span>
-                    <span className="value">₹{r.fare}</span>
-                    </div>
-                    <div>
-                    <span className="lbl">Status</span>
-                    <span className={`badge status-${r.status.toLowerCase()}`}>{r.status}</span>
-                    </div>
+              <div className="ride-details">
+                <div>
+                  <span className="lbl">Fare</span>
+                  <span className="value">₹{r.fare}</span>
                 </div>
+                <div>
+                  <span className="lbl">Status</span>
+                  <span className={`badge status-${r.status.toLowerCase()}`}>{r.status}</span>
+                </div>
+              </div>
 
-                <button className="ride-btn">View Details</button>
-                </div>
-            ))}
+              <button className="ride-btn" onClick={() => setSelectedRide(r)}>View Details</button>
+            </div>
+          ))}
         </div>
-
-
       </div>
+
+      <RideModal ride={selectedRide} onClose={() => setSelectedRide(null)} />
     </>
   );
 }

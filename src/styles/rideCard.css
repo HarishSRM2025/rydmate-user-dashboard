@@ -1,4 +1,3 @@
-/* Container */
 .rides-page-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -7,7 +6,7 @@
 .rides-page-value{
     margin-left: 8px;
 }
-/* Card */
+
 .rides-page-card {
   background: #fff;
   padding: 18px;
@@ -22,7 +21,6 @@
   box-shadow: 0 12px 30px rgba(0,0,0,0.12);
 }
 
-/* Header */
 .rides-page-header {
   display: flex;
   justify-content: space-between;
@@ -46,7 +44,6 @@
   width: max-content;
 }
 
-/* Body */
 .rides-page-body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -63,9 +60,9 @@
 .rides-page-fare {
   font-weight: 700;
   color: #111827;
+  margin-left: 30px;
 }
 
-/* Status Badge */
 .rides-page-badge {
   padding: 6px 10px;
   border-radius: 8px;

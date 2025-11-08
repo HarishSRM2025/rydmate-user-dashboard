@@ -1,28 +1,31 @@
 import React from 'react';
+import { NavLink } from "react-router-dom";
 import '../styles/sidebar.css';
 
 const items = [
-  {key:'overview', icon: 'fa-home', label:'Dashboard'},
-  {key:'rides', icon: 'fa-car', label:'My Rides'},
-  {key:'wallet', icon: 'fa-wallet', label:'Wallet'},
-  {key:'offers', icon: 'fa-ticket-alt', label:'Offers'},
-  {key:'profile', icon: 'fa-user', label:'Profile'},
-  {key:'support', icon: 'fa-headset', label:'Support'}
+  { path: '/user/overview', icon: 'fa-home', label: 'Dashboard' },
+  { path: '/user/rides', icon: 'fa-car', label: 'My Rides' },
+  { path: '/user/wallet', icon: 'fa-wallet', label: 'Wallet' },
+  { path: '/user/offers', icon: 'fa-ticket-alt', label: 'Offers' },
+  { path: '/user/profile', icon: 'fa-user', label: 'Profile' },
+  { path: '/user/support', icon: 'fa-headset', label: 'Support' },
 ];
 
-export default function Sidebar({ current, onChange, open, onOpenBooking }) {
+export default function Sidebar({ open, onOpenBooking, onNavigate }) {
   return (
     <aside className={`sidebar ${open ? 'mobile-open' : ''}`}>
       <nav className="sidebar-nav">
-        {items.map(i => (
-          <button
-            key={i.key}
-            className={`nav-item ${current === i.key ? 'active' : ''}`}
-            onClick={() => onChange(i.key)}
+
+        {items.map(item => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            onClick={onNavigate}
           >
-            <i className={`fas ${i.icon}`}></i>
-            <span>{i.label}</span>
-          </button>
+            <i className={`fas ${item.icon}`}></i>
+            <span>{item.label}</span>
+          </NavLink>
         ))}
 
         <button className="nav-item book-ride-btn" onClick={onOpenBooking}>

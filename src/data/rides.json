@@ -1,5 +1,41 @@
 [
-  {"id":"r001","date":"2025-10-20","route":"MG Road → Airport","fare":450,"status":"Completed","vehicle":"Car","driver":"Ramesh Kumar"},
-  {"id":"r002","date":"2025-10-18","route":"Home → Office","fare":120,"status":"Completed","vehicle":"Bike","driver":"Arun Singh"},
-  {"id":"r003","date":"2025-10-15","route":"Mall → Restaurant","fare":85,"status":"Completed","vehicle":"Car","driver":"Ravi"}
+  {
+    "id": "r001",
+    "date": "2025-10-20",
+    "route": "MG Road → Airport",
+    "fare": 450,
+    "status": "Completed",
+    "vehicle": "Car",
+    "driver": "Ramesh Kumar",
+    "pickupTime": "09:30 AM",
+    "dropTime": "10:15 AM",
+    "distance": "15 km",
+    "notes": "Passenger requested AC on"
+  },
+  {
+    "id": "r002",
+    "date": "2025-10-18",
+    "route": "Home → Office",
+    "fare": 120,
+    "status": "Completed",
+    "vehicle": "Bike",
+    "driver": "Arun Singh",
+    "pickupTime": "08:15 AM",
+    "dropTime": "08:45 AM",
+    "distance": "7 km",
+    "notes": "Helmet provided"
+  },
+  {
+    "id": "r003",
+    "date": "2025-10-15",
+    "route": "Mall → Restaurant",
+    "fare": 85,
+    "status": "Completed",
+    "vehicle": "Auto",
+    "driver": "Ravi",
+    "pickupTime": "07:30 PM",
+    "dropTime": "07:50 PM",
+    "distance": "5 km",
+    "notes": "Evening trip with extra luggage"
+  }
 ]

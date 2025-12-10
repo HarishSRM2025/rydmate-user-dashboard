@@ -84,49 +84,37 @@ export default function App() {
                     <Route
                       path="/user/overview"
                       element={
-                        <ProtectedRoute>
                           <DashboardOverview {...commonProps} />
-                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/user/rides"
                       element={
-                        <ProtectedRoute>
                           <Rides {...commonProps} />
-                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/user/wallet"
                       element={
-                        <ProtectedRoute>
                           <Wallet {...commonProps} />
-                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/user/offers"
                       element={
-                        <ProtectedRoute>
                           <Offers {...commonProps} />
-                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/user/profile"
                       element={
-                        <ProtectedRoute>
                           <Profile {...commonProps} />
-                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/user/support"
                       element={
-                        <ProtectedRoute>
                           <Support {...commonProps} />
-                        </ProtectedRoute>
                       }
                     />
                   </Routes>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import '../styles/sidebar.css';
 
 const items = [
@@ -12,6 +12,15 @@ const items = [
 ];
 
 export default function Sidebar({ open, onOpenBooking, onNavigate }) {
+   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Remove user data
+    localStorage.removeItem("RydmateUserData");
+
+    // Redirect to /auth
+    navigate("/auth");
+  };
   return (
     <aside className={`sidebar ${open ? 'mobile-open' : ''}`}>
       <nav className="sidebar-nav">
@@ -35,7 +44,7 @@ export default function Sidebar({ open, onOpenBooking, onNavigate }) {
       </nav>
 
       <div className="logout-btn">
-        <button className="nav-item">
+        <button className="nav-item" onClick={handleLogout}>
           <i className="fas fa-sign-out-alt"></i>
           <span>Logout</span>
         </button>

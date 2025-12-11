@@ -13,6 +13,7 @@ export default function RydMateAuth() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone:"",
     password: "",
     confirmPassword: "",
     userType: "customer",
@@ -23,6 +24,7 @@ export default function RydMateAuth() {
     setFormData({
       name: "",
       email: "",
+      phone:"",
       password: "",
       confirmPassword: "",
       userType: "customer",
@@ -55,6 +57,7 @@ export default function RydMateAuth() {
         setFormData({
           name: "",
           email: "",
+          phone:"",
           password: "",
           confirmPassword: "",
           userType: "customer",
@@ -91,6 +94,7 @@ export default function RydMateAuth() {
     setFormData({
       name: "",
       email: "",
+      phone:"",
       password: "",
       confirmPassword: "",
       userType: "customer",
@@ -148,7 +152,19 @@ export default function RydMateAuth() {
                   required
                 />
               </div>
-
+              {!isLogin && (
+                <div className="auth-input-group">
+                  <label>Phone Number (What'sapp)</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone Number (What'sapp)"
+                    required
+                  />
+                </div>
+              )}
               <div className="auth-input-group">
                 <label>Password</label>
                 <input
@@ -160,7 +176,7 @@ export default function RydMateAuth() {
                   required
                 />
               </div>
-
+              
               {!isLogin && (
                 <div className="auth-input-group">
                   <label>Confirm Password</label>

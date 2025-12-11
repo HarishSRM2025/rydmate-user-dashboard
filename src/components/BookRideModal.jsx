@@ -117,7 +117,7 @@ export default function BookRideModal({ open, onClose, vehicles = [] }) {
           {/* Pickup Date & Time */}
           <div className="form-group">
             <label className="form-label">Pickup Date & Time</label>
-            <div className="input-wrapper">
+            <div className="input-wrapper DateTime">
               <input className="form-input" type="date" value={pickupDate} onChange={e => setPickupDate(e.target.value)} />
               <input className="form-input" type="time" value={pickupTime} onChange={e => setPickupTime(e.target.value)} />
             </div>
@@ -127,7 +127,7 @@ export default function BookRideModal({ open, onClose, vehicles = [] }) {
           {tripType === 'round' && (
             <div className="form-group">
               <label className="form-label">Return Date & Time</label>
-              <div className="input-wrapper">
+              <div className="input-wrapper DateTime">
                 <input className="form-input" type="date" value={returnDate} onChange={e => setReturnDate(e.target.value)} />
                 <input className="form-input" type="time" value={returnTime} onChange={e => setReturnTime(e.target.value)} />
               </div>

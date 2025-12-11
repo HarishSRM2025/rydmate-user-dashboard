@@ -45,91 +45,66 @@ export default function App() {
 
   return (
     <Router>
-      <div className="app-root">
+  <div className="app-root">
 
-        {/* ---- Redirect Root Page ---- */}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              isLoggedIn ? <Navigate to="/user/overview" /> : <Navigate to="/auth" />
-            }
-          />
-        </Routes>
+    <Routes>
+      {/* Redirect */}
+      <Route
+        path="/"
+        element={
+          isLoggedIn ? <Navigate to="/user/overview" /> : <Navigate to="/auth" />
+        }
+      />
 
-        {/* ---- Auth Page ---- */}
-        <Routes>
-          <Route path="/auth" element={<RydMateAuth/>} />
-        </Routes>
+      {/* Public Auth Page */}
+      <Route path="/auth" element={<RydMateAuth />} />
 
-        {/* ---- Logged-In Layout ---- */}
-        {isLoggedIn && (
-          <>
-            <TopNav
-              user={userData}
-              onToggleSidebar={() => setSidebarOpen(v => !v)}
-              onOpenBooking={() => setBookingOpen(true)}
-            />
-
-            <div className="main-layout">
-              <Sidebar
-                open={sidebarOpen}
+      {/* Protected Routes */}
+      {isLoggedIn && (
+        <Route
+          path="/user/*"
+          element={
+            <>
+              <TopNav
+                user={userData}
+                onToggleSidebar={() => setSidebarOpen(v => !v)}
                 onOpenBooking={() => setBookingOpen(true)}
-                onNavigate={() => setSidebarOpen(false)}
               />
 
-              <main className="main-content">
-                <div className="content-wrapper">
-                  <Routes>
-                    <Route
-                      path="/user/overview"
-                      element={
-                          <DashboardOverview {...commonProps} />
-                      }
-                    />
-                    <Route
-                      path="/user/rides"
-                      element={
-                          <Rides {...commonProps} />
-                      }
-                    />
-                    <Route
-                      path="/user/wallet"
-                      element={
-                          <Wallet {...commonProps} />
-                      }
-                    />
-                    <Route
-                      path="/user/offers"
-                      element={
-                          <Offers {...commonProps} />
-                      }
-                    />
-                    <Route
-                      path="/user/profile"
-                      element={
-                          <Profile {...commonProps} />
-                      }
-                    />
-                    <Route
-                      path="/user/support"
-                      element={
-                          <Support {...commonProps} />
-                      }
-                    />
-                  </Routes>
-                </div>
-              </main>
-            </div>
+              <div className="main-layout">
+                <Sidebar
+                  open={sidebarOpen}
+                  onOpenBooking={() => setBookingOpen(true)}
+                  onNavigate={() => setSidebarOpen(false)}
+                />
 
-            <BookRideModal
-              open={bookingOpen}
-              onClose={() => setBookingOpen(false)}
-              vehicles={['bike', 'auto', 'car']}
-            />
-          </>
-        )}
-      </div>
-    </Router>
+                <main className="main-content">
+                  <div className="content-wrapper">
+                    <Routes>
+                      <Route path="overview" element={<DashboardOverview {...commonProps} />} />
+                      <Route path="rides" element={<Rides {...commonProps} />} />
+                      <Route path="wallet" element={<Wallet {...commonProps} />} />
+                      <Route path="offers" element={<Offers {...commonProps} />} />
+                      <Route path="profile" element={<Profile {...commonProps} />} />
+                      <Route path="support" element={<Support {...commonProps} />} />
+                    </Routes>
+                  </div>
+                </main>
+              </div>
+
+              <BookRideModal
+                open={bookingOpen}
+                onClose={() => setBookingOpen(false)}
+                vehicles={['bike', 'auto', 'car']}
+              />
+            </>
+          }
+        />
+      )}
+    </Routes>
+
+  </div>
+</Router>
+
   );
 }

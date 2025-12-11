@@ -1,184 +1,93 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { jsPDF } from "jspdf";
 import "../styles/rideDetails.css";
-import { Split } from "lucide-react";
 
 export default function RideModal({ ride, onClose }) {
-  if (!ride) return null;
-  const trip = ride.route.split("→");
-  const vehicleIcon =
-    ride.vehicle === "Bike"
-      ? "fas fa-motorcycle"
-      : ride.vehicle === "Car"
-      ? "fas fa-car"
-      : "fas fa-truck-pickup";
-const handleDownloadPDF = () => {
-  const doc = new jsPDF({ unit: "pt", format: "a4" });
-  const pageWidth = 595;
-  const pageHeight = 842;
+  const [driver, setDriver] = useState(null);
 
-  // --- Professional Header with Deep Red ---
-  doc.setFillColor(220, 38, 38);
-  doc.rect(0, 0, pageWidth, 140, "F");
-
-  // --- Company Branding ---
-  doc.setFontSize(42);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(255, 255, 255);
-  doc.text("RYDMATE", 40, 65);
-
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(255, 255, 255);
-  doc.text("Premium Ride Services", 40, 90);
-
-  doc.setFontSize(10);
-  doc.text("www.rydmate.com | support@rydmate.com", 40, 110);
-
-  // --- Invoice Info Card (White Box) ---
-  doc.setFillColor(255, 255, 255);
-  doc.roundedRect(360, 40, 195, 80, 3, 3, "F");
-  
-  doc.setFontSize(11);
-  doc.setTextColor(107, 114, 128);
-  doc.setFont("helvetica", "normal");
-  doc.text("INVOICE", 375, 60);
-  
-  doc.setFontSize(18);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(0, 0, 0);
-  doc.text(`#${ride.id}`, 375, 85);
-  
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(107, 114, 128);
-  doc.text(ride.date, 375, 105);
-
-  // --- Main Content Area ---
-  let y = 180;
-
-  // --- Section: Trip Details ---
-  doc.setFontSize(18);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(220, 38, 38);
-  doc.text("Trip Information", 40, y);
-
-  y += 30;
-
-  // Create table for trip details
-  const tripData = [
-    ["Route", trip[0]+"to"+trip[1]],
-    ["Driver Name", ride.driver],
-    ["Vehicle Type", ride.vehicle],
-    ["Pickup Time", ride.pickupTime || "N/A"],
-    ["Drop Time", ride.dropTime || "N/A"],
-    ["Distance", ride.distance || "N/A"],
-    ["Status", ride.status]
-  ];
-
-  // Table styling
-  doc.setFillColor(248, 250, 252);
-  doc.rect(40, y, pageWidth - 80, 35 * tripData.length, "F");
-
-  doc.setDrawColor(226, 232, 240);
-  doc.setLineWidth(0.5);
-
-  tripData.forEach((row, index) => {
-    const rowY = y + (index * 35);
-    
-    // Alternate row colors
-    if (index % 2 === 0) {
-      doc.setFillColor(255, 255, 255);
-      doc.rect(40, rowY, pageWidth - 80, 35, "F");
+  // -----------------------------
+  // ALWAYS KEEP HOOKS AT THE TOP
+  // -----------------------------
+  useEffect(() => {
+    if (!ride || !ride.driverId) {
+      setDriver(null);
+      return;
     }
 
-    // Draw horizontal line
-    doc.line(40, rowY + 35, pageWidth - 40, rowY + 35);
+    const fetchDriver = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/user/getuser/${ride.driverId}`);
+        const data = await res.json();
+        setDriver(data);
+      } catch (err) {
+        console.error("Driver fetch error:", err);
+      }
+    };
 
-    // Label
-    doc.setFontSize(11);
+    fetchDriver();
+  }, [ride]);
+  
+  function formatToAMPM(timeString) {
+    if (!timeString) return "N/A";
+
+    let [hours, minutes] = timeString.split(":").map(Number);
+
+    let ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // Convert 0 → 12
+
+    return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+  }
+
+  if (!ride) return null;
+
+  const vehicleIcon =
+    ride.vehicle === "bike"
+      ? "fas fa-motorcycle"
+      : ride.vehicle === "car"
+      ? "fas fa-car"
+      : "fas fa-truck-pickup";
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const pageWidth = 595;
+
+    // HEADER
+    doc.setFillColor(220, 38, 38);
+    doc.rect(0, 0, pageWidth, 140, "F");
+
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(71, 85, 105);
-    doc.text(row[0], 55, rowY + 22);
+    doc.setFontSize(40);
+    doc.setTextColor(255, 255, 255);
+    doc.text("RYDMATE", 40, 70);
 
-    // Value
+    doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    doc.setTextColor(15, 23, 42);
-    doc.text(row[1], 250, rowY + 22);
-  });
+    doc.text("Premium Ride Services", 40, 95);
 
-  y += (tripData.length * 35) + 40;
+    let y = 180;
 
+    // TRIP INFO
+    const tripData = [
+      ["Pickup Location", ride.pickup_location],
+      ["Drop Location", ride.drop_location],
+      ["Pickup Date", ride.pickup_date],
+      ["Pickup Time", formatToAMPM(ride.pickup_time)],
+      ["Return Date", ride.return_date || "N/A"],
+      ["Return Time", formatToAMPM(ride.return_time) || "N/A"],
+      ["Vehicle", ride.vehicle || "N/A"],
+      ["Trip Type", ride.trip_type],
+      ["Status", ride.status],
+      ["Driver Name", driver ? driver.name : "Not Assigned"],
+    ];
 
+    tripData.forEach((row, index) => {
+      doc.setFontSize(12);
+      doc.text(`${row[0]}: ${row[1]}`, 40, y + index * 20);
+    });
 
-//  const pageWidth = doc.internal.pageSize.getWidth();
-let summaryY = y; // starting Y position
+    doc.save(`Rydmate_Invoice_${ride.id}.pdf`);
+  };
 
-// Section title
-doc.setFontSize(18);
-doc.setFont("helvetica", "bold");
-doc.setTextColor(220, 38, 38);
-doc.text("Payment Summary", 40, summaryY);
-
-summaryY += 25; // spacing after title
-
-// Fare box dimensions
-const boxHeight = 50;
-const boxX = 40;
-const boxWidth = pageWidth - 80;
-
-// Draw Fare box with rounded corners
-doc.setFillColor(254, 242, 242);  // light background
-doc.setDrawColor(220, 38, 38);    // border color
-doc.setLineWidth(1);
-doc.roundedRect(boxX, summaryY, boxWidth, boxHeight, 6, 6, "FD");
-
-// Label: "TOTAL FARE" (left-aligned)
-doc.setFontSize(11);
-doc.setFont("helvetica", "bold");
-doc.setTextColor(127, 29, 29);
-doc.text("TOTAL FARE", boxX + 20, summaryY + 25);
-
-// Fare Amount (right-aligned)
-doc.setFontSize(26);
-doc.setFont("helvetica", "bold");
-doc.setTextColor(220, 38, 38);
-doc.text(`Rs. ${ride.fare}/-`, boxX + boxWidth-30, summaryY + 30, { align: "right" });
-
-  // --- Footer ---
-  y = pageHeight - 120;
-
-  doc.setDrawColor(226, 232, 240);
-  doc.setLineWidth(1);
-  doc.line(40, y, pageWidth - 40, y);
-
-  y += 25;
-
-  // Footer content
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(220, 38, 38);
-  doc.text("Thank you for riding with Rydmate!", 40, y);
-
-  y += 25;
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(100, 116, 139);
-  doc.text("Customer Support: support@rydmate.com | Phone: +91 1800-XXX-XXXX", 40, y);
-
-  y += 18;
-  doc.setFontSize(9);
-  doc.setTextColor(148, 163, 184);
-  doc.text("This is a computer-generated invoice. No signature required.", 40, y);
-
-  // --- Page border (optional elegant touch) ---
-  doc.setDrawColor(226, 232, 240);
-  doc.setLineWidth(1);
-  doc.rect(20, 20, pageWidth - 40, pageHeight - 40);
-
-  // --- Save PDF ---
-  doc.save(`Rydmate_Invoice_${ride.id}.pdf`);
-};
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
@@ -188,22 +97,40 @@ doc.text(`Rs. ${ride.fare}/-`, boxX + boxWidth-30, summaryY + 30, { align: "righ
         </div>
 
         <div className="modal-content-grid">
-          <div className="modal-row"><span>Route</span><span>{ride.route}</span></div>
-          <div className="modal-row"><span>Date</span><span>{ride.date}</span></div>
+          <div className="modal-row"><span>Pickup</span><span>{ride.pickup_location}</span></div>
+          <div className="modal-row"><span>Drop</span><span>{ride.drop_location}</span></div>
+          <div className="modal-row"><span>Pickup Date</span><span>{ride.pickup_date}</span></div>
+          <div className="modal-row"><span>Pickup Time</span><span>{formatToAMPM(ride.pickup_time)}</span></div>
+
+          {ride.return_date && (
+            <>
+              <div className="modal-row"><span>Return Date</span><span>{ride.return_date}</span></div>
+              <div className="modal-row"><span>Return Time</span><span>{formatToAMPM(ride.return_time) || "N/A"}</span></div>
+            </>
+          )}
+
           <div className="modal-row"><span>Fare</span><span>₹{ride.fare}</span></div>
           <div className="modal-row"><span>Status</span><span>{ride.status}</span></div>
           <div className="modal-row"><span>Vehicle</span><span>{ride.vehicle}</span></div>
-          <div className="modal-row"><span>Driver</span><span>{ride.driver}</span></div>
-          <div className="modal-row"><span>Pickup Time</span><span>{ride.pickupTime || "N/A"}</span></div>
-          <div className="modal-row"><span>Drop Time</span><span>{ride.dropTime || "N/A"}</span></div>
-          <div className="modal-row"><span>Distance</span><span>{ride.distance || "N/A"}</span></div>
-          <div className="modal-row"><span>Notes</span><span>{ride.notes || "N/A"}</span></div>
+          <div className="modal-row"><span>Trip Type</span><span>{ride.trip_type}</span></div>
+
+          <div className="modal-row">
+            <span>Driver</span>
+            <span>{driver ? driver.name : "Not Assigned"}</span>
+          </div>
         </div>
 
         <div className="modal-actions">
-          <button className="btn-download" onClick={handleDownloadPDF}>
-            <i className="fas fa-download"></i> Download Invoice
-          </button>
+          {(ride.status === "cancelled" || ride.status === "completed") ? (
+            <button className="btn-download" onClick={handleDownloadPDF}>
+              <i className="fas fa-download"></i> Download Invoice
+            </button>
+          ) : (
+            <button className="btn-download" disabled style={{ cursor: "not-allowed" }}>
+              <i className="fas fa-download"></i> Download Invoice
+            </button>
+          )}
+
           <button className="btn-close" onClick={onClose}>
             <i className="fas fa-times"></i> Close
           </button>

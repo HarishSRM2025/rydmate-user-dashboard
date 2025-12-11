@@ -103,3 +103,9 @@ html, body, #root {
     padding: 12px;
   }
 }
+
+.DateTime{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}

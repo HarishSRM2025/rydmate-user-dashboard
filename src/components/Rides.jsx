@@ -7,7 +7,7 @@ export default function Rides({ openBooking }) {
   const [selectedRide, setSelectedRide] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  function trimWords(text, limit = 5) {
+  function trimWords(text, limit = 4) {
     if (!text) return "";
     return text.split(" ").slice(0, limit).join(" ");
   }

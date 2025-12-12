@@ -16,7 +16,7 @@ export default function DashboardOverview({ wallet, offers }) {
 
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
   }
-  function trimWords(text, limit = 5) {
+  function trimWords(text, limit = 4) {
     if (!text) return "";
     return text.split(" ").slice(0, limit).join(" ");
   }

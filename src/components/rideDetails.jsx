@@ -6,13 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function RideModal({ ride, onClose }) {
   const navigate = useNavigate();
-  const apiUrl = import.meta.env.VITE_API_URL ;
+  const apiUrl = import.meta.env.VITE_API_URL;
   const userData = JSON.parse(localStorage.getItem("RydmateUserData") || "null");
   const [driver, setDriver] = useState(null);
-  console.log(ride)
-  // -----------------------------
-  // ALWAYS KEEP HOOKS AT THE TOP
-  // -----------------------------
+
   useEffect(() => {
     if (!ride || !ride.driverId) {
       setDriver(null);
@@ -31,46 +28,46 @@ export default function RideModal({ ride, onClose }) {
 
     fetchDriver();
   }, [ride]);
-  
-  const Cancel = async () =>{
+
+  const Cancel = async () => {
     try {
-      await axios.put(`${apiUrl}/api/trip/status/${ride.id}`, {"status":"cancelled"}, {
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      alert("Trip Cancelled")
+      await axios.put(
+        `${apiUrl}/api/trip/status/${ride.id}`,
+        { status: "cancelled" },
+        {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      alert("Trip Cancelled");
       navigate("/");
-      onClose()
+      onClose();
     } catch (error) {
-      alert(error)
+      alert(error);
     }
-  }
+  };
 
   function formatToAMPM(timeString) {
     if (!timeString) return "N/A";
 
     let [hours, minutes] = timeString.split(":").map(Number);
-
     let ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12; // Convert 0 → 12
+    hours = hours % 12 || 12;
 
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
   }
 
   if (!ride) return null;
 
-  const vehicleIcon =
-    ride.vehicle === "bike"
-      ? "fas fa-motorcycle"
-      : ride.vehicle === "car"
-      ? "fas fa-car"
-      : "fas fa-truck-pickup";
-
-  const handleDownloadPDF = () => {
+  // ---------------------------------------
+  // FIXED PDF GENERATOR (WORKS INSIDE MODAL)
+  // ---------------------------------------
+const handleDownloadPDF = () => {
+  setTimeout(() => {
     const doc = new jsPDF({ unit: "pt", format: "a4" });
-    const pageWidth = 595;
+    const pageWidth = doc.internal.pageSize.width;
 
     // HEADER
     doc.setFillColor(220, 38, 38);
@@ -81,33 +78,97 @@ export default function RideModal({ ride, onClose }) {
     doc.setTextColor(255, 255, 255);
     doc.text("RYDMATE", 40, 70);
 
-    doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
     doc.text("Premium Ride Services", 40, 95);
 
+    // INVOICE BOX
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(pageWidth - 180, 40, 140, 80, 10, 10, "F");
+
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("INVOICE", pageWidth - 160, 65);
+
+    doc.setFontSize(12);
+    doc.text(`#${ride.id}`, pageWidth - 160, 85);
+    doc.text(ride.pickup_date || "", pageWidth - 160, 105);
+
+    // CONTENT START
     let y = 180;
+    const containerX = 30;
+    const containerWidth = pageWidth - 60;
+    const rowHeight = 50;
 
-    // TRIP INFO
-    const tripData = [
-      ["Pickup Location", ride.pickup_location],
-      ["Drop Location", ride.drop_location],
-      ["Pickup Date", ride.pickup_date],
-      ["Pickup Time", formatToAMPM(ride.pickup_time)],
-      ["Return Date", ride.return_date || "N/A"],
-      ["Return Time", formatToAMPM(ride.return_time) || "N/A"],
-      ["Vehicle", ride.vehicle || "N/A"],
-      ["Trip Type", ride.trip_type],
-      ["Status", ride.status],
-      ["Driver Name", driver ? driver.name : "Not Assigned"],
-    ];
+    const safe = (v) => (v ? String(v) : "N/A");
 
-    tripData.forEach((row, index) => {
+    // TITLE
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Trip Information", containerX, y);
+    y += 30;
+
+    // ---------- TABLE DRAW FUNCTION (UPDATED FOR WRAP) ----------
+    const drawRow = (label, value) => {
+      doc.setFillColor(248, 248, 248);
+      doc.rect(containerX, y - 18, containerWidth, rowHeight, "F");
+
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
-      doc.text(`${row[0]}: ${row[1]}`, 40, y + index * 20);
+      doc.text(label, containerX + 10, y);
+
+      doc.setFont("helvetica", "normal");
+
+      // ⭐ WRAP LONG TEXT ⭐
+      doc.text(String(value), containerX + 180, y, {
+        maxWidth: containerWidth - 200,
+      });
+
+      y += rowHeight + 4;
+    };
+
+    // ---------- ROWS ----------
+    drawRow("Pickup Location", safe(ride.pickup_location));
+    drawRow("Drop Location", safe(ride.drop_location));
+    drawRow("Pickup Date", safe(ride.pickup_date));
+    drawRow("Pickup Time", safe(formatToAMPM(ride.pickup_time)));
+    drawRow("Return Date", safe(ride.return_date));
+    drawRow("Return Time", safe(formatToAMPM(ride.return_time)));
+    drawRow("Vehicle", safe(ride.vehicle));
+    drawRow("Trip Type", safe(ride.trip_type));
+    drawRow("Status", safe(ride.status));
+    drawRow("Driver Name", driver ? safe(driver.name) : "Not Assigned");
+
+    // SPACE
+    y += 20;
+
+    // ---------- PAYMENT SUMMARY ----------
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Payment Summary", containerX, y);
+    y += 25;
+
+    doc.setFillColor(255, 230, 230);
+    doc.roundedRect(containerX, y, containerWidth, 50, 10, 10, "F");
+
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Total Fare", containerX + 15, y + 30);
+
+    doc.setFontSize(20);
+
+    // ⭐ CENTER ALIGN THE FARE ⭐
+    doc.text(`₹${safe(ride.fare)}/-`, containerX + containerWidth / 2, y + 32, {
+      align: "center",
     });
 
+    // SAVE
     doc.save(`Rydmate_Invoice_${ride.id}.pdf`);
-  };
+  }, 0);
+};
+
+
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -126,7 +187,7 @@ export default function RideModal({ ride, onClose }) {
           {ride.return_date && (
             <>
               <div className="modal-row"><span>Return Date</span><span>{ride.return_date}</span></div>
-              <div className="modal-row"><span>Return Time</span><span>{formatToAMPM(ride.return_time) || "N/A"}</span></div>
+              <div className="modal-row"><span>Return Time</span><span>{formatToAMPM(ride.return_time)}</span></div>
             </>
           )}
 
@@ -146,14 +207,19 @@ export default function RideModal({ ride, onClose }) {
             <button className="btn-download" onClick={handleDownloadPDF}>
               <i className="fas fa-download"></i> Download Invoice
             </button>
-          ) : (ride.status === "pending") ?(
-            <button className="btn-download"  onClick={Cancel}>
-              <i className="fas fa-cancel"></i> Cancel Ride
-            </button> ) : 
-            (<button className="btn-download" disabled style={{ cursor: "not-allowed",background:"#ccc",color:"#000" }}>
+          ) : ride.status === "pending" ? (
+            <button className="btn-download" onClick={Cancel}>
+              <i className="fas fa-close"></i> Cancel Ride
+            </button>
+          ) : (
+            <button
+              className="btn-download"
+              disabled
+              style={{ cursor: "not-allowed", background: "#ccc", color: "#000" }}
+            >
               <i className="fas fa-download"></i> Download Invoice
-            </button>)
-          }
+            </button>
+          )}
 
           <button className="btn-close" onClick={onClose}>
             <i className="fas fa-times"></i> Close

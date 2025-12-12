@@ -93,7 +93,7 @@ export default function RideModal({ ride, onClose }) {
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header-gradient">
           <h2>Trip Details</h2>
-          <p>OPT : {ride.otp}</p>
+          <p>OTP : {ride.otp}</p>
         </div>
 
         <div className="modal-content-grid">

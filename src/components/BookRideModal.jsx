@@ -4,7 +4,7 @@ import "../styles/modal.css";
 
 export default function BookRideModal({ open, onClose, vehicles = [] }) {
 
-  const apiUrl = import.meta.env.VITE_API_URL || "";
+  const apiUrl = import.meta.env.VITE_API_URL ;
   const OLA_KEY = import.meta.env.VITE_OLA_API_KEY;
 
   const [selected, setSelected] = useState(null);
@@ -219,7 +219,8 @@ export default function BookRideModal({ open, onClose, vehicles = [] }) {
     const number = Math.floor(1000 + Math.random() * 9000);
     return number.toString();
   }
-
+  
+  
   // ---------------- SUBMIT ----------------
   const submit = async () => {
     if (!selected) return alert("Please select a vehicle type");
@@ -238,7 +239,7 @@ export default function BookRideModal({ open, onClose, vehicles = [] }) {
       pickup_time: pickupTime,
       distance_km: distance,
       otp:otp(),
-      fare: tripType === "single" ? calculateFare(distance,selected).toFixed(2) : calculateFare(distance,selected)*2.5.toFixed(2),
+      fare: fare,
       vehicle: selected,
     };
 

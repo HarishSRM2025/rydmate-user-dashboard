@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { jsPDF } from "jspdf";
 import "../styles/rideDetails.css";
+import { useNavigate } from "react-router-dom";
 
 export default function RideModal({ ride, onClose }) {
+  const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL ;
+  const userData = JSON.parse(localStorage.getItem("RydmateUserData") || "null");
   const [driver, setDriver] = useState(null);
   console.log(ride)
   // -----------------------------
@@ -16,7 +21,7 @@ export default function RideModal({ ride, onClose }) {
 
     const fetchDriver = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/user/getuser/${ride.driverId}`);
+        const res = await fetch(`${apiUrl}/api/user/getuser/${ride.driverId}`);
         const data = await res.json();
         setDriver(data);
       } catch (err) {
@@ -27,6 +32,22 @@ export default function RideModal({ ride, onClose }) {
     fetchDriver();
   }, [ride]);
   
+  const Cancel = async () =>{
+    try {
+      await axios.put(`${apiUrl}/api/trip/status/${ride.id}`, {"status":"cancelled"}, {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      alert("Trip Cancelled")
+      navigate("/");
+      onClose()
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   function formatToAMPM(timeString) {
     if (!timeString) return "N/A";
 
@@ -125,11 +146,14 @@ export default function RideModal({ ride, onClose }) {
             <button className="btn-download" onClick={handleDownloadPDF}>
               <i className="fas fa-download"></i> Download Invoice
             </button>
-          ) : (
-            <button className="btn-download" disabled style={{ cursor: "not-allowed",background:"#ccc",color:"#000" }}>
+          ) : (ride.status === "pending") ?(
+            <button className="btn-download"  onClick={Cancel}>
+              <i className="fas fa-cancel"></i> Cancel Ride
+            </button> ) : 
+            (<button className="btn-download" disabled style={{ cursor: "not-allowed",background:"#ccc",color:"#000" }}>
               <i className="fas fa-download"></i> Download Invoice
-            </button>
-          )}
+            </button>)
+          }
 
           <button className="btn-close" onClick={onClose}>
             <i className="fas fa-times"></i> Close

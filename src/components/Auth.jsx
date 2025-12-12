@@ -63,7 +63,7 @@ export default function RydMateAuth() {
           userType: "customer",
         })
         // Redirect to user overview
-        navigate("/user/overview");
+        navigate("/");
 
         return;
       }

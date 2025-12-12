@@ -16,6 +16,11 @@ export default function DashboardOverview({ wallet, offers }) {
 
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
   }
+  function trimWords(text, limit = 5) {
+    if (!text) return "";
+    return text.split(" ").slice(0, limit).join(" ");
+  }
+
 
   useEffect(() => {
     async function fetchTrips() {
@@ -125,7 +130,7 @@ export default function DashboardOverview({ wallet, offers }) {
 
                 <div className="ride-info">
                   <div className="ride-location">
-                    {r.pickup_location} → {r.drop_location}
+                    {trimWords(r.pickup_location)}.. → {trimWords(r.drop_location)}..
                   </div>
                   <div className="ride-date">
                     {r.pickup_date} | {formatToAMPM(r.pickup_time)}

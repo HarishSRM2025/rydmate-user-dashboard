@@ -215,10 +215,10 @@ export default function BookRideModal({ open, onClose, vehicles = [] }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickupCoords, dropCoords, selected]);
 
-  function opt() {
-  const number = Math.floor(1000 + Math.random() * 9000);
-  return number.toString();
-}
+  function otp() {
+    const number = Math.floor(1000 + Math.random() * 9000);
+    return number.toString();
+  }
 
   // ---------------- SUBMIT ----------------
   const submit = async () => {
@@ -237,8 +237,8 @@ export default function BookRideModal({ open, onClose, vehicles = [] }) {
       pickup_date: pickupDate,
       pickup_time: pickupTime,
       distance_km: distance,
-      opt:opt(),
-      fare: tripType === "single" ? calculateFare(distance,selected) : Math.round(calculateFare(distance,selected)),
+      otp:otp(),
+      fare: tripType === "single" ? calculateFare(distance,selected).toFixed(2) : calculateFare(distance,selected)*2.5.toFixed(2),
       vehicle: selected,
     };
 

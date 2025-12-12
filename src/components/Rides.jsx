@@ -7,6 +7,11 @@ export default function Rides({ openBooking }) {
   const [selectedRide, setSelectedRide] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  function trimWords(text, limit = 5) {
+    if (!text) return "";
+    return text.split(" ").slice(0, limit).join(" ");
+  }
+
   const fetchTrips = async () => {
     try {
       const userData = JSON.parse(localStorage.getItem("RydmateUserData"));
@@ -82,7 +87,7 @@ export default function Rides({ openBooking }) {
                       ? "fas fa-car"
                       : "fas fa-truck-pickup"
                   }></i>
-                  <span>{r.pickup_location} → {r.drop_location}</span>
+                  <span>{trimWords(r.pickup_location)}.. → {trimWords(r.drop_location)}..</span>
                 </div>
 
                 <span className={`rides-page-badge rides-page-status-${r.status?.toLowerCase()}`}>

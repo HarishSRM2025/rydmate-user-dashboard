@@ -4,7 +4,7 @@ import "../styles/rideDetails.css";
 
 export default function RideModal({ ride, onClose }) {
   const [driver, setDriver] = useState(null);
-
+  console.log(ride)
   // -----------------------------
   // ALWAYS KEEP HOOKS AT THE TOP
   // -----------------------------
@@ -92,8 +92,8 @@ export default function RideModal({ ride, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header-gradient">
-          <i className={vehicleIcon}></i>
           <h2>Trip Details</h2>
+          <p>OPT : {ride.otp}</p>
         </div>
 
         <div className="modal-content-grid">
@@ -126,7 +126,7 @@ export default function RideModal({ ride, onClose }) {
               <i className="fas fa-download"></i> Download Invoice
             </button>
           ) : (
-            <button className="btn-download" disabled style={{ cursor: "not-allowed" }}>
+            <button className="btn-download" disabled style={{ cursor: "not-allowed",background:"#ccc",color:"#000" }}>
               <i className="fas fa-download"></i> Download Invoice
             </button>
           )}

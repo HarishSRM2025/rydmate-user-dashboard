@@ -81,11 +81,10 @@ export default function Rides({ openBooking }) {
               <div className="rides-page-header">
                 <div className="rides-page-title">
                   <i className={
-                    r.vehicle === "Bike"
-                      ? "fas fa-motorcycle"
-                      : r.vehicle === "Car"
-                      ? "fas fa-car"
-                      : "fas fa-truck-pickup"
+                    r.vehicle === "bike" ? "fas fa-motorcycle" :
+                    r.vehicle === "car" ? "fas fa-car" :
+                    r.vehicle === "auto" ? "fas fa-truck-pickup" :
+                    "fas fa-car"
                   }></i>
                   <span>{trimWords(r.pickup_location)}.. → {trimWords(r.drop_location)}..</span>
                 </div>

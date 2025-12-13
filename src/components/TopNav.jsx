@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import '../styles/nav.css';
 
 export default function TopNav({ onToggleSidebar, onOpenBooking }) {
+  const navigate = useNavigate();
   const [userInitial, setUserInitial] = useState("U");
-
+  function navigateToProfile() {
+    navigate('/user/profile')
+  }
   useEffect(() => {
     const storedUser = localStorage.getItem("RydmateUserData");
 
@@ -14,7 +18,7 @@ export default function TopNav({ onToggleSidebar, onOpenBooking }) {
         // Safely extract name
         const name =(userObj.user.name && String(userObj.user.name)) 
 
-        const initial = name.trim().charAt(0)?.toUpperCase() || "U";
+        const initial = name.slice(0, 2).toUpperCase()   || "U";
         setUserInitial(initial);
 
       } catch (err) {
@@ -39,9 +43,9 @@ export default function TopNav({ onToggleSidebar, onOpenBooking }) {
             <span className="notification-dot" />
           </button>
 
-          <div className="user-info">
-            <div className="user-avatar">{userInitial}</div>
-          </div>
+          <button className="user-info" style={{background:'rgba(0,0,0,0)',border:"0",cursor:"pointer",padding:'0'}} onClick={navigateToProfile}>
+            <span className="user-avatar">{userInitial}</span>
+          </button>
 
           <button className="btn book-btn" onClick={onOpenBooking}>
             <i className="fas fa-plus"></i> Book Ride

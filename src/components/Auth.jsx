@@ -79,7 +79,8 @@ export default function RydMateAuth() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        userType: formData.userType,
+        phone:formData.phone,
+        userType: formData.userType
       });
 
       setMessage("Signup successful! Please login.");

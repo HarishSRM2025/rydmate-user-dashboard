@@ -126,6 +126,8 @@ export default function BookRideModal({ open, onClose, vehicles = [] }) {
           return;
         }
 
+        
+
         try {
           const url = `https://api.olamaps.io/places/v1/reverse-geocode?latlng=${lat}%2C${lng}&language=en&api_key=${OLA_KEY}`;
           const res = await fetch(url);
@@ -234,10 +236,12 @@ export default function BookRideModal({ open, onClose, vehicles = [] }) {
       userId: userData.user.id,
       trip_type: tripType === "single" ? "normal" : "round",
       pickup_location: pickupLocation,
+      pickup_latitude:pickupCoords.lat,
+      pickup_longitude:pickupCoords.lng,   
       drop_location: dropLocation,
       pickup_date: pickupDate,
       pickup_time: pickupTime,
-      distance_km: distance,
+      distance: tripType === 'single' ? distance  : distance * 2 ,
       otp:otp(),
       fare: fare,
       vehicle: selected,
